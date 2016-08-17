@@ -1,0 +1,4 @@
+/flask/venv
+*.pyc
+.idea/
+
