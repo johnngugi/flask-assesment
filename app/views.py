@@ -1,17 +1,22 @@
-from app import app, db
+from app import app, db, lm
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_security import login_user, logout_user, current_user, login_required
 from .models import User
 from .forms import RegistrationForm, LoginForm
 
 
+@lm.user_loader
+def load_user(user_id):
+    return User.get(user_id)
+
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     form = RegistrationForm(request.form)
-    if request.method == 'POST' and form.validate_on_submit():
-        user = User(form.email.data,
-                    form.password.data)
+    if request.method == 'POST' and form.validate():
+        user = User(form.email.data, form.password.data)
         db.session.add(user)
+        db.session.commit()
         flash('Thanks for registering')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
@@ -27,20 +32,21 @@ def contact():
     return render_template('contact.html')
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm(request.form)
-    if request.method == 'POST' and form.validate():
-        user = User.query.get(form.email.data)
-        if user:
-            user.authenticated = True
-            db.session.add(user)
-            db.session.commit()
-            login_user(user, remember=True)
-            return redirect(url_for('index'))
-    return render_template('login.html', form=form)
-
+    if request.method == 'GET':
+        return render_template('login.html')
+    username = request.form['username']
+    password = request.form['password']
+    registered_user = User.query.filter_by(username=username, password=password).first()
+    if registered_user is None:
+        flash('Username or Password is invalid', 'error')
+        return redirect(url_for('login'))
+    login_user(registered_user)
+    flash('Logged in successfully')
+    return redirect(request.args.get('next') or url_for('index'))
 
 @app.route('/index')
+@login_required
 def index():
-        return render_template('index.html')
+    return render_template('index.html')

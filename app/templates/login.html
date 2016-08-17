@@ -8,12 +8,12 @@
     <div class="row">
         <div class="large-6-centered columns">
            {% from "_formhelpers.html" import render_field %}
-            <form method=post action="/register">
+            <form method=post action="/login">
                 <dl>
                     {{ render_field(form.email) }}
                     {{ render_field(form.password) }}
                 </dl>
-                <p><input type=submit value=Register>
+                <p><input type=submit value=Register></p>
             </form>
         </div>
     </div>

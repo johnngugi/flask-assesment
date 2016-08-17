@@ -1,5 +1,6 @@
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 from wtforms.validators import DataRequired
+from .models import User
 
 
 class RegistrationForm(Form):
@@ -15,3 +16,4 @@ class RegistrationForm(Form):
 class LoginForm(Form):
     email = StringField('Email Address', [validators.Length(min=6, max=35)])
     password = PasswordField('Password', validators=[DataRequired()])
+
