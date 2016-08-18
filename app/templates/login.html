@@ -1,20 +1,29 @@
 {% extends 'base.html' %}
-{% block topbar %}
-    {{ super() }}
-{% endblock %}
-
 {% block content %}
-    <h1>Login</h1>
-    <div class="row">
-        <div class="large-6-centered columns">
-           {% from "_formhelpers.html" import render_field %}
-            <form method=post action="/login">
-                <dl>
-                    {{ render_field(form.email) }}
-                    {{ render_field(form.password) }}
-                </dl>
-                <p><input type=submit value=Register></p>
-            </form>
+<div class="row">
+    <div class="large-12 columns">
+</div>
+  <form action="" method=post class="form-horizontal">
+    <h2>Signin to FlaskLogin Application</h2>
+    <div class="control-group">
+        <div class="controls">
+          <input type="text" id="email" name="email" class="input-xlarge"
+            placeholder="Enter Username" required>
         </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+          <input type="password" id="password" name="password" class="input-xlarge"
+            placeholder="Enter Password" required>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-success">Signin</button>
+        </div>
+    </div>
+  </form>
     </div>
 {% endblock %}
